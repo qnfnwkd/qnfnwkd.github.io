@@ -5,7 +5,7 @@ highlighter:      rouge
 # Setup
 title:            Buru
 tagline:          'Blog'
-description:      '.'
+description:      ''
 url:              https://qnfnwkd.github.io
 baseurl:          ''
                   # the optional subpath of your site, e.g. "/blog"
