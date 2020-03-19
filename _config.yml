@@ -3,8 +3,8 @@ markdown:         kramdown
 highlighter:      rouge
 
 # Setup
-title:            Buru Chang
-tagline:          'Blog'
+title:            장부루
+tagline:          '블로그'
 description:      "Buru's Blog"
 url:              https://qnfnwkd.github.io
 baseurl:          ''
