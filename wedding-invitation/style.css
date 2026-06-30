@@ -1,15 +1,20 @@
 :root {
-  --page: #f4f1ec;
-  --paper: #fffdf9;
+  --page: #f8f7f3;
+  --paper: #fffefd;
+  --section-alt: #faf9f5;
   --ink: #2f2a26;
   --muted: #756f68;
-  --line: #e4dace;
-  --accent: #7a5b45;
-  --soft: #fbf5ed;
+  --line: #ebe7df;
+  --accent: #6f6258;
+  --soft: #f7f6f2;
 }
 
 * {
   box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
 }
 
 body {
@@ -26,7 +31,7 @@ body {
   min-height: 100vh;
   margin: 0 auto;
   background: var(--paper);
-  box-shadow: 0 0 30px rgb(60 46 35 / 10%);
+  box-shadow: 0 0 30px rgb(54 49 43 / 7%);
 }
 
 .cover {
@@ -34,7 +39,7 @@ body {
   min-height: 90vh;
   align-content: center;
   padding: 64px 28px 56px;
-  border-bottom: 1px solid var(--line);
+  background: var(--paper);
   text-align: center;
 }
 
@@ -48,7 +53,7 @@ body {
 .cover-photo {
   display: block;
   width: 100%;
-  aspect-ratio: 4 / 5;
+  height: clamp(260px, 48vh, 420px);
   margin: 0 0 28px;
   border-radius: 8px;
   object-fit: cover;
@@ -82,8 +87,12 @@ h1 span {
 
 .section {
   padding: 52px 28px;
-  border-bottom: 1px solid var(--line);
+  background: var(--paper);
   text-align: center;
+}
+
+.section:nth-of-type(even) {
+  background: var(--section-alt);
 }
 
 .section h2 {
@@ -150,8 +159,8 @@ dd {
   border: 1px solid var(--line);
   border-radius: 8px;
   background:
-    linear-gradient(rgb(255 253 249 / 84%), rgb(255 253 249 / 84%)),
-    repeating-linear-gradient(135deg, #efe7dc 0 12px, #fbf3e8 12px 24px);
+    linear-gradient(rgb(255 254 253 / 88%), rgb(255 254 253 / 88%)),
+    repeating-linear-gradient(135deg, #efede8 0 12px, #faf9f5 12px 24px);
   color: var(--muted);
   font-size: 14px;
 }
@@ -260,6 +269,10 @@ footer p {
   .section {
     padding-right: 22px;
     padding-left: 22px;
+  }
+
+  .cover-photo {
+    height: clamp(220px, 42vh, 340px);
   }
 
   h1 {
