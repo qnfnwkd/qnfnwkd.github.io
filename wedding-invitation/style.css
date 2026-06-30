@@ -134,7 +134,7 @@ dt {
 }
 
 dd {
-  margin: 0;
+  margin-bottom: 4px;
   color: #4e4842;
 }
 
