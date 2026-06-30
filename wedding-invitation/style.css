@@ -39,10 +39,20 @@ body {
 }
 
 .label {
-  margin: 0 0 26px;
+  margin: 0 0 22px;
   color: var(--accent);
   font-family: Georgia, "Times New Roman", serif;
   font-size: 15px;
+}
+
+.cover-photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  margin: 0 0 28px;
+  border-radius: 8px;
+  object-fit: cover;
+  object-position: center;
 }
 
 h1 {
