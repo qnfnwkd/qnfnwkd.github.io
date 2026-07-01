@@ -27,11 +27,11 @@
       <section class="cover">
         <p class="label">Wedding Invitation</p>
         <img class="cover-photo" src="./images/cover.jpg" alt="신랑 신부 사진" />
-        <h2 class="couple-names">
-          장부루 &amp; 성아진
-        </h2>
-        <p class="date">2026. 10. 17. 토요일 오후 2시</p>
-        <p class="place">라마다 서울 신도림 호텔 2층 그랜드볼룸홀</p>
+        <h2>장부루 &amp; 성아진</h2>
+        <div class="cover-info" aria-label="예식 일시와 장소">
+          <p class="date">2026. 10. 17. 토요일 오후 2시</p>
+          <p class="place">라마다 서울 신도림 호텔 2층 그랜드볼룸홀</p>
+        </div>
       </section>
 
       <section class="section">
@@ -76,11 +76,10 @@
         <a class="button" href="https://map.kakao.com/" target="_blank" rel="noreferrer">지도 보기</a>
       </section>
 
-      <section class="section">
-        <h2>사진</h2>
-        <div class="photo-guide">
-          <span>wedding-invitation/images/cover.jpg 파일을 추가해 주세요</span>
-        </div>
+      <section class="section gallery" data-gallery-total="18" data-gallery-visible="9" data-gallery-step="9">
+        <h2>갤러리</h2>
+        <div class="gallery-grid" id="galleryGrid" aria-label="웨딩 사진 갤러리"></div>
+        <button class="more-button" id="galleryMore" type="button">&lt;more&gt;</button>
       </section>
 
       <section class="section contact">
@@ -156,6 +155,9 @@
     </main>
     <script>
       const copyButtons = document.querySelectorAll(".copy-account");
+      const gallery = document.querySelector(".gallery");
+      const galleryGrid = document.querySelector("#galleryGrid");
+      const galleryMore = document.querySelector("#galleryMore");
 
       async function copyText(text) {
         if (navigator.clipboard && window.isSecureContext) {
@@ -193,6 +195,62 @@
           }, 1400);
         });
       });
+
+      function paddedNumber(number) {
+        return String(number).padStart(2, "0");
+      }
+
+      function createGalleryItem(number) {
+        const index = paddedNumber(number);
+        const item = document.createElement("figure");
+        const image = document.createElement("img");
+        const placeholder = document.createElement("span");
+
+        item.className = "gallery-item";
+        image.src = `./images/gallery/${index}.jpg`;
+        image.alt = `갤러리 사진 ${number}`;
+        image.loading = "lazy";
+        placeholder.className = "gallery-placeholder";
+        placeholder.textContent = index;
+
+        image.addEventListener("load", () => {
+          item.classList.add("is-loaded");
+        });
+
+        image.addEventListener("error", () => {
+          image.remove();
+          item.classList.add("is-placeholder");
+        });
+
+        item.append(image, placeholder);
+        return item;
+      }
+
+      function renderGallery(limit) {
+        if (!gallery || !galleryGrid || !galleryMore) return;
+
+        const total = Number(gallery.dataset.galleryTotal || 9);
+        const visible = Math.min(limit, total);
+
+        galleryGrid.replaceChildren();
+
+        for (let number = 1; number <= visible; number += 1) {
+          galleryGrid.append(createGalleryItem(number));
+        }
+
+        gallery.dataset.galleryVisible = String(visible);
+        galleryMore.hidden = visible >= total;
+      }
+
+      if (gallery && galleryGrid && galleryMore) {
+        renderGallery(Number(gallery.dataset.galleryVisible || 9));
+
+        galleryMore.addEventListener("click", () => {
+          const current = Number(gallery.dataset.galleryVisible || 9);
+          const step = Number(gallery.dataset.galleryStep || 9);
+          renderGallery(current + step);
+        });
+      }
     </script>
   </body>
 </html>
