@@ -147,12 +147,19 @@ dd {
   text-align: left;
 }
 
-.map-card {
+.naver-map {
   position: relative;
-  display: grid;
   width: calc(100% + 56px);
-  min-height: 230px;
+  height: 280px;
   margin: 0 -28px 14px;
+  overflow: hidden;
+  background: var(--soft);
+}
+
+.map-card {
+  position: absolute;
+  inset: 0;
+  display: grid;
   place-items: center;
   padding: 34px 28px;
   overflow: hidden;
@@ -533,7 +540,7 @@ footer p {
     font-size: 19px;
   }
 
-  .map-card,
+  .naver-map,
   .map-actions {
     width: calc(100% + 44px);
     margin-right: -22px;

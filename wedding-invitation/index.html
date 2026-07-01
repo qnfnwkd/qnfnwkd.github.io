@@ -21,6 +21,7 @@
     <meta name="twitter:description" content="소중한 분들을 결혼식에 초대합니다." />
     <meta name="twitter:image" content="https://qnfnwkd.github.io/wedding-invitation/images/cover.jpg" />
     <link rel="stylesheet" href="./style.css" />
+    <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=ckyt2ysq3b"></script>
   </head>
   <body>
     <main class="invitation">
@@ -74,10 +75,12 @@
           </div>
         </dl>
         <h3 class="map-title">오시는 길</h3>
-        <div class="map-card" aria-label="라마다 서울 신도림 호텔 위치 안내">
-          <div class="map-pin" aria-hidden="true"></div>
-          <strong>라마다 서울 신도림 호텔</strong>
-          <span>서울특별시 구로구 경인로 624</span>
+        <div class="naver-map" id="venueMap" aria-label="라마다 서울 신도림 호텔 네이버 지도">
+          <div class="map-card map-fallback" aria-label="라마다 서울 신도림 호텔 위치 안내">
+            <div class="map-pin" aria-hidden="true"></div>
+            <strong>라마다 서울 신도림 호텔</strong>
+            <span>서울특별시 구로구 경인로 624</span>
+          </div>
         </div>
         <div class="map-actions" aria-label="지도 앱으로 길찾기">
           <a class="map-action map-action-naver" href="https://map.naver.com/v5/search/%EB%9D%BC%EB%A7%88%EB%8B%A4%20%EC%84%9C%EC%9A%B8%20%EC%8B%A0%EB%8F%84%EB%A6%BC%20%ED%98%B8%ED%85%94" target="_blank" rel="noreferrer">
@@ -185,6 +188,11 @@
       const lightbox = document.querySelector("#galleryLightbox");
       const lightboxImage = document.querySelector("#lightboxImage");
       const lightboxClose = document.querySelector("#lightboxClose");
+      const venue = {
+        name: "라마다 서울 신도림 호텔",
+        lat: 37.5065595,
+        lng: 126.8853578,
+      };
 
       async function copyText(text) {
         if (navigator.clipboard && window.isSecureContext) {
@@ -319,6 +327,34 @@
           closeLightbox();
         }
       });
+
+      function initVenueMap() {
+        const mapElement = document.querySelector("#venueMap");
+
+        if (!mapElement || !window.naver?.maps) return;
+
+        const position = new naver.maps.LatLng(venue.lat, venue.lng);
+
+        mapElement.replaceChildren();
+
+        const map = new naver.maps.Map(mapElement, {
+          center: position,
+          zoom: 16,
+          minZoom: 14,
+          scaleControl: false,
+          logoControl: true,
+          mapDataControl: false,
+          zoomControl: false,
+        });
+
+        new naver.maps.Marker({
+          position,
+          map,
+          title: venue.name,
+        });
+      }
+
+      initVenueMap();
     </script>
   </body>
 </html>
