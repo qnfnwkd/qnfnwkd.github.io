@@ -82,6 +82,11 @@
         <button class="more-button" id="galleryMore" type="button">&lt;more&gt;</button>
       </section>
 
+      <div class="lightbox" id="galleryLightbox" aria-hidden="true" role="dialog" aria-label="갤러리 이미지 확대 보기">
+        <button class="lightbox-close" id="lightboxClose" type="button" aria-label="닫기">×</button>
+        <img id="lightboxImage" src="" alt="" />
+      </div>
+
       <section class="section contact">
         <h2>연락처</h2>
         <a href="tel:01085285446">신랑에게 연락하기</a>
@@ -158,6 +163,9 @@
       const gallery = document.querySelector(".gallery");
       const galleryGrid = document.querySelector("#galleryGrid");
       const galleryMore = document.querySelector("#galleryMore");
+      const lightbox = document.querySelector("#galleryLightbox");
+      const lightboxImage = document.querySelector("#lightboxImage");
+      const lightboxClose = document.querySelector("#lightboxClose");
 
       async function copyText(text) {
         if (navigator.clipboard && window.isSecureContext) {
@@ -202,11 +210,15 @@
 
       function createGalleryItem(number) {
         const index = paddedNumber(number);
-        const item = document.createElement("figure");
+        const item = document.createElement("button");
         const image = document.createElement("img");
         const placeholder = document.createElement("span");
 
         item.className = "gallery-item";
+        item.type = "button";
+        item.setAttribute("aria-label", `갤러리 사진 ${number} 크게 보기`);
+        item.dataset.fullImage = `./images/gallery/${index}.jpg`;
+        item.dataset.alt = `갤러리 사진 ${number}`;
         image.src = `./images/gallery/${index}.jpg`;
         image.alt = `갤러리 사진 ${number}`;
         image.loading = "lazy";
@@ -222,8 +234,30 @@
           item.classList.add("is-placeholder");
         });
 
+        item.addEventListener("click", () => {
+          openLightbox(item.dataset.fullImage, item.dataset.alt);
+        });
+
         item.append(image, placeholder);
         return item;
+      }
+
+      function openLightbox(src, alt) {
+        if (!lightbox || !lightboxImage) return;
+
+        lightboxImage.src = src;
+        lightboxImage.alt = alt;
+        lightbox.setAttribute("aria-hidden", "false");
+        document.body.classList.add("is-lightbox-open");
+      }
+
+      function closeLightbox() {
+        if (!lightbox || !lightboxImage) return;
+
+        lightbox.setAttribute("aria-hidden", "true");
+        lightboxImage.src = "";
+        lightboxImage.alt = "";
+        document.body.classList.remove("is-lightbox-open");
       }
 
       function renderGallery(limit) {
@@ -251,6 +285,20 @@
           renderGallery(current + step);
         });
       }
+
+      lightboxClose?.addEventListener("click", closeLightbox);
+
+      lightbox?.addEventListener("click", (event) => {
+        if (event.target === lightbox) {
+          closeLightbox();
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          closeLightbox();
+        }
+      });
     </script>
   </body>
 </html>
