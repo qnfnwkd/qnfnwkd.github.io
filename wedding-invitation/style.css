@@ -138,6 +138,15 @@ dd {
   color: #4e4842;
 }
 
+.map-title {
+  width: calc(100% + 56px);
+  margin: 26px -28px 12px;
+  padding: 0 28px;
+  color: var(--accent);
+  font-size: 18px;
+  text-align: left;
+}
+
 .map-frame {
   width: calc(100% + 56px);
   height: 280px;
@@ -416,6 +425,14 @@ footer p {
     width: calc(100% + 44px);
     margin-right: -22px;
     margin-left: -22px;
+  }
+
+  .map-title {
+    width: calc(100% + 44px);
+    margin-right: -22px;
+    margin-left: -22px;
+    padding-right: 22px;
+    padding-left: 22px;
   }
 
   .gallery-grid {
