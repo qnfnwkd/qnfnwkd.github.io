@@ -27,9 +27,9 @@
       <section class="cover">
         <p class="label">Wedding Invitation</p>
         <img class="cover-photo" src="./images/cover.jpg" alt="신랑 신부 사진" />
-        <h1>
+        <h2 class="couple-names">
           장부루 &amp; 성아진
-        </h1>
+        </h2>
         <p class="date">2026. 10. 17. 토요일 오후 2시</p>
         <p class="place">라마다 서울 신도림 호텔 2층 그랜드볼룸홀</p>
       </section>
@@ -94,39 +94,57 @@
         <details>
           <summary>신랑측 계좌 정보</summary>
           <div class="account-list">
-            <article>
-              <strong>장부루</strong>
-              <p>우리은행 1002-739-143545</p>
+            <article data-copy="우리은행 1002-739-143545 장부루">
+              <div>
+                <strong>장부루</strong>
+                <p>우리은행 1002-739-143545</p>
+              </div>
+              <button class="copy-account" type="button">복사</button>
             </article>
-            <article>
-              <strong>신랑 아버지</strong>
-              <p>은행명 000-0000-0000</p>
-              <span>예금주 아버지 성함</span>
+            <article data-copy="은행명 000-0000-0000 예금주 아버지 성함">
+              <div>
+                <strong>신랑 아버지</strong>
+                <p>은행명 000-0000-0000</p>
+                <span>예금주 아버지 성함</span>
+              </div>
+              <button class="copy-account" type="button">복사</button>
             </article>
-            <article>
-              <strong>신랑 어머니</strong>
-              <p>은행명 000-0000-0000</p>
-              <span>예금주 어머니 성함</span>
+            <article data-copy="은행명 000-0000-0000 예금주 어머니 성함">
+              <div>
+                <strong>신랑 어머니</strong>
+                <p>은행명 000-0000-0000</p>
+                <span>예금주 어머니 성함</span>
+              </div>
+              <button class="copy-account" type="button">복사</button>
             </article>
           </div>
         </details>
         <details>
           <summary>신부측 계좌 정보</summary>
           <div class="account-list">
-            <article>
-              <strong>신부 이름</strong>
-              <p>은행명 000-0000-0000</p>
-              <span>예금주 신부 이름</span>
+            <article data-copy="은행명 000-0000-0000 예금주 신부 이름">
+              <div>
+                <strong>신부 이름</strong>
+                <p>은행명 000-0000-0000</p>
+                <span>예금주 신부 이름</span>
+              </div>
+              <button class="copy-account" type="button">복사</button>
             </article>
-            <article>
-              <strong>신부 아버지</strong>
-              <p>은행명 000-0000-0000</p>
-              <span>예금주 아버지 성함</span>
+            <article data-copy="은행명 000-0000-0000 예금주 아버지 성함">
+              <div>
+                <strong>신부 아버지</strong>
+                <p>은행명 000-0000-0000</p>
+                <span>예금주 아버지 성함</span>
+              </div>
+              <button class="copy-account" type="button">복사</button>
             </article>
-            <article>
-              <strong>신부 어머니</strong>
-              <p>은행명 000-0000-0000</p>
-              <span>예금주 어머니 성함</span>
+            <article data-copy="은행명 000-0000-0000 예금주 어머니 성함">
+              <div>
+                <strong>신부 어머니</strong>
+                <p>은행명 000-0000-0000</p>
+                <span>예금주 어머니 성함</span>
+              </div>
+              <button class="copy-account" type="button">복사</button>
             </article>
           </div>
         </details>
@@ -136,5 +154,45 @@
         <p>함께해 주셔서 감사합니다.</p>
       </footer>
     </main>
+    <script>
+      const copyButtons = document.querySelectorAll(".copy-account");
+
+      async function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.top = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
+
+      copyButtons.forEach((button) => {
+        button.addEventListener("click", async () => {
+          const account = button.closest("[data-copy]");
+          const text = account?.dataset.copy;
+
+          if (!text) return;
+
+          try {
+            await copyText(text);
+            button.textContent = "복사됨";
+          } catch {
+            button.textContent = "실패";
+          }
+
+          setTimeout(() => {
+            button.textContent = "복사";
+          }, 1400);
+        });
+      });
+    </script>
   </body>
 </html>
