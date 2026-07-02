@@ -402,12 +402,14 @@ dd {
   width: min(100%, 480px);
   max-height: 86vh;
   overflow: hidden;
+  border-radius: 0;
 }
 
 .lightbox-track {
   display: grid;
   grid-template-columns: repeat(3, 100%);
   align-items: center;
+  border-radius: 0;
   touch-action: pan-y;
   transform: translate3d(-100%, 0, 0);
   will-change: transform;
@@ -428,12 +430,19 @@ dd {
   max-height: 86vh;
   height: auto;
   margin: 0 auto;
-  border-radius: 0;
+  border-radius: 0 !important;
   object-fit: contain;
   box-shadow: 0 18px 60px rgb(0 0 0 / 30%);
   touch-action: none;
   user-select: none;
   -webkit-user-drag: none;
+}
+
+.lightbox img,
+.lightbox picture,
+.lightbox canvas,
+.lightbox video {
+  border-radius: 0 !important;
 }
 
 .lightbox-nav {
