@@ -84,15 +84,12 @@
         </div>
         <div class="map-actions" aria-label="지도 앱으로 길찾기">
           <a class="map-action map-action-naver" href="https://map.naver.com/v5/search/%EB%9D%BC%EB%A7%88%EB%8B%A4%20%EC%84%9C%EC%9A%B8%20%EC%8B%A0%EB%8F%84%EB%A6%BC%20%ED%98%B8%ED%85%94" target="_blank" rel="noreferrer">
-            <span>N</span>
             네이버
           </a>
           <a class="map-action map-action-kakao" href="https://map.kakao.com/link/search/%EB%9D%BC%EB%A7%88%EB%8B%A4%20%EC%84%9C%EC%9A%B8%20%EC%8B%A0%EB%8F%84%EB%A6%BC%20%ED%98%B8%ED%85%94" target="_blank" rel="noreferrer">
-            <span>K</span>
             카카오
           </a>
           <a class="map-action map-action-tmap" href="tmap://route?goalname=%EB%9D%BC%EB%A7%88%EB%8B%A4%20%EC%84%9C%EC%9A%B8%20%EC%8B%A0%EB%8F%84%EB%A6%BC%20%ED%98%B8%ED%85%94&goalx=126.8853578&goaly=37.5065595">
-            <span>T</span>
             티맵
           </a>
         </div>
@@ -101,7 +98,7 @@
       <section class="section gallery" data-gallery-total="18" data-gallery-visible="9" data-gallery-step="9">
         <h2>갤러리</h2>
         <div class="gallery-grid" id="galleryGrid" aria-label="웨딩 사진 갤러리"></div>
-        <button class="more-button" id="galleryMore" type="button">&lt;more&gt;</button>
+        <button class="more-button" id="galleryMore" type="button">더 보기</button>
       </section>
 
       <div class="lightbox" id="galleryLightbox" aria-hidden="true" role="dialog" aria-label="갤러리 이미지 확대 보기">
@@ -301,7 +298,11 @@
         }
 
         gallery.dataset.galleryVisible = String(visible);
-        galleryMore.hidden = visible >= total;
+        const isExpanded = visible >= total;
+
+        galleryMore.textContent = isExpanded ? "접기" : "더 보기";
+        galleryMore.hidden = total <= 9;
+        gallery.classList.toggle("is-expanded", isExpanded);
       }
 
       if (gallery && galleryGrid && galleryMore) {
@@ -310,7 +311,9 @@
         galleryMore.addEventListener("click", () => {
           const current = Number(gallery.dataset.galleryVisible || 9);
           const step = Number(gallery.dataset.galleryStep || 9);
-          renderGallery(current + step);
+          const total = Number(gallery.dataset.galleryTotal || 9);
+
+          renderGallery(current >= total ? 9 : current + step);
         });
       }
 
