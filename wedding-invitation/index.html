@@ -348,7 +348,7 @@
         if (!lightboxTrack) return;
 
         lightboxTrack.classList.toggle("is-animating", animate);
-        lightboxTrack.style.transform = `translateX(calc(-100% + ${offset}px))`;
+        lightboxTrack.style.transform = `translate3d(calc(-100% + ${offset}px), 0, 0)`;
       }
 
       function renderLightboxImages(index) {
@@ -388,7 +388,7 @@
           currentGalleryIndex = wrappedGalleryIndex(currentGalleryIndex + direction);
           renderLightboxImages(currentGalleryIndex);
           setLightboxTrackOffset(0);
-        }, 230);
+        }, 280);
       }
 
       function closeLightbox() {
@@ -463,9 +463,10 @@
         const diffY = event.changedTouches[0].clientY - touchStartY;
 
         if (Math.abs(diffX) > Math.abs(diffY)) {
+          event.preventDefault();
           setLightboxTrackOffset(diffX);
         }
-      }, { passive: true });
+      }, { passive: false });
 
       lightbox?.addEventListener("touchend", (event) => {
         const touchEndX = event.changedTouches[0].clientX;
