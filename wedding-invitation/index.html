@@ -239,6 +239,7 @@
       let currentGalleryIndex = 1;
       let touchStartX = 0;
       let touchStartY = 0;
+      let isDraggingLightbox = false;
       const venue = {
         name: "라마다 서울 신도림 호텔",
         lat: 37.5065595,
@@ -330,6 +331,8 @@
         if (!lightbox || !lightboxImage) return;
 
         currentGalleryIndex = index;
+        lightboxImage.classList.remove("is-dragging");
+        lightboxImage.style.transform = "";
         lightboxImage.src = galleryImageSrc(index);
         lightboxImage.alt = `갤러리 사진 ${index}`;
         lightbox.setAttribute("aria-hidden", "false");
@@ -353,6 +356,8 @@
         lightbox.setAttribute("aria-hidden", "true");
         lightboxImage.src = "";
         lightboxImage.alt = "";
+        lightboxImage.classList.remove("is-dragging");
+        lightboxImage.style.transform = "";
         document.body.classList.remove("is-lightbox-open");
       }
 
@@ -408,6 +413,22 @@
       lightbox?.addEventListener("touchstart", (event) => {
         touchStartX = event.changedTouches[0].clientX;
         touchStartY = event.changedTouches[0].clientY;
+        isDraggingLightbox = true;
+        lightboxImage?.classList.add("is-dragging");
+      }, { passive: true });
+
+      lightbox?.addEventListener("touchmove", (event) => {
+        if (!isDraggingLightbox || !lightboxImage) return;
+
+        const diffX = event.changedTouches[0].clientX - touchStartX;
+        const diffY = event.changedTouches[0].clientY - touchStartY;
+
+        if (Math.abs(diffX) > Math.abs(diffY)) {
+          const limitedX = Math.max(-96, Math.min(96, diffX));
+          const opacity = Math.max(0.72, 1 - Math.abs(limitedX) / 220);
+
+          lightboxImage.style.transform = `translateX(${limitedX}px) scale(${opacity})`;
+        }
       }, { passive: true });
 
       lightbox?.addEventListener("touchend", (event) => {
@@ -415,6 +436,12 @@
         const touchEndY = event.changedTouches[0].clientY;
         const diffX = touchEndX - touchStartX;
         const diffY = touchEndY - touchStartY;
+
+        isDraggingLightbox = false;
+        lightboxImage?.classList.remove("is-dragging");
+        if (lightboxImage) {
+          lightboxImage.style.transform = "";
+        }
 
         if (Math.abs(diffX) > 48 && Math.abs(diffX) > Math.abs(diffY)) {
           moveLightbox(diffX > 0 ? -1 : 1);
@@ -442,7 +469,7 @@
 
         const map = new naver.maps.Map(mapElement, {
           center: position,
-          zoom: 16,
+          zoom: 15,
           minZoom: 14,
           scaleControl: false,
           logoControl: true,
