@@ -138,6 +138,54 @@ dd {
   color: #4e4842;
 }
 
+.wedding-calendar {
+  margin: 26px auto 30px;
+  padding: 18px;
+  border-radius: 8px;
+  background: var(--paper);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.calendar-month {
+  margin-bottom: 14px;
+  color: var(--accent);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.calendar-grid span {
+  display: grid;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--ink);
+  font-size: 13px;
+}
+
+.calendar-day-name {
+  aspect-ratio: auto;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.calendar-grid .sunday {
+  color: #a96c63;
+}
+
+.calendar-grid .wedding-day {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+}
+
 .map-title {
   width: calc(100% + 56px);
   margin: 26px -28px 12px;
@@ -369,6 +417,32 @@ dd {
   -webkit-user-drag: none;
 }
 
+.lightbox-nav {
+  position: fixed;
+  top: 50%;
+  z-index: 1001;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 88%);
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 34px;
+  line-height: 1;
+  transform: translateY(-50%);
+}
+
+.lightbox-prev {
+  left: max(14px, calc((100vw - 480px) / 2 - 58px));
+}
+
+.lightbox-next {
+  right: max(14px, calc((100vw - 480px) / 2 - 58px));
+}
+
 .lightbox-close {
   position: fixed;
   top: 14px;
@@ -519,6 +593,14 @@ footer p {
 
   h2 {
     font-size: 19px;
+  }
+
+  .wedding-calendar {
+    padding: 14px;
+  }
+
+  .calendar-grid {
+    gap: 4px;
   }
 
   .naver-map,
