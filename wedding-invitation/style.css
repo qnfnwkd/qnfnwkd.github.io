@@ -403,26 +403,41 @@ dd {
   display: flex;
 }
 
-.lightbox img {
+.lightbox-viewport {
+  width: min(100%, 480px);
+  max-height: 86vh;
+  overflow: hidden;
+}
+
+.lightbox-track {
+  display: grid;
+  grid-template-columns: repeat(3, 100%);
+  align-items: center;
+  transform: translateX(-100%);
+  will-change: transform;
+}
+
+.lightbox-track.is-animating {
+  transition: transform 230ms ease;
+}
+
+.lightbox-track.is-dragging {
+  transition: none;
+}
+
+.lightbox-track img {
   display: block;
-  max-width: min(100%, 480px);
+  max-width: 100%;
   max-height: 86vh;
   width: auto;
   height: auto;
+  margin: 0 auto;
   border-radius: 6px;
   object-fit: contain;
   box-shadow: 0 18px 60px rgb(0 0 0 / 30%);
   touch-action: none;
   user-select: none;
   -webkit-user-drag: none;
-  transition:
-    opacity 160ms ease,
-    transform 160ms ease;
-  will-change: transform;
-}
-
-.lightbox img.is-dragging {
-  transition: none;
 }
 
 .lightbox-nav {

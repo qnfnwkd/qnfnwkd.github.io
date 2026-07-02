@@ -151,7 +151,13 @@
       <div class="lightbox" id="galleryLightbox" aria-hidden="true" role="dialog" aria-label="갤러리 이미지 확대 보기">
         <button class="lightbox-close" id="lightboxClose" type="button" aria-label="닫기">×</button>
         <button class="lightbox-nav lightbox-prev" id="lightboxPrev" type="button" aria-label="이전 사진">‹</button>
-        <img id="lightboxImage" src="" alt="" draggable="false" />
+        <div class="lightbox-viewport">
+          <div class="lightbox-track" id="lightboxTrack">
+            <img id="lightboxPrevImage" src="" alt="" draggable="false" />
+            <img id="lightboxImage" src="" alt="" draggable="false" />
+            <img id="lightboxNextImage" src="" alt="" draggable="false" />
+          </div>
+        </div>
         <button class="lightbox-nav lightbox-next" id="lightboxNext" type="button" aria-label="다음 사진">›</button>
       </div>
 
@@ -232,7 +238,10 @@
       const galleryGrid = document.querySelector("#galleryGrid");
       const galleryMore = document.querySelector("#galleryMore");
       const lightbox = document.querySelector("#galleryLightbox");
+      const lightboxTrack = document.querySelector("#lightboxTrack");
+      const lightboxPrevImage = document.querySelector("#lightboxPrevImage");
       const lightboxImage = document.querySelector("#lightboxImage");
+      const lightboxNextImage = document.querySelector("#lightboxNextImage");
       const lightboxClose = document.querySelector("#lightboxClose");
       const lightboxPrev = document.querySelector("#lightboxPrev");
       const lightboxNext = document.querySelector("#lightboxNext");
@@ -327,37 +336,67 @@
         return `./images/gallery/${paddedNumber(index)}.jpg`;
       }
 
-      function openLightbox(index) {
-        if (!lightbox || !lightboxImage) return;
+      function wrappedGalleryIndex(index) {
+        const total = Number(gallery?.dataset.galleryTotal || 1);
 
-        currentGalleryIndex = index;
-        lightboxImage.classList.remove("is-dragging");
-        lightboxImage.style.transform = "";
+        if (index < 1) return total;
+        if (index > total) return 1;
+        return index;
+      }
+
+      function setLightboxTrackOffset(offset, animate = false) {
+        if (!lightboxTrack) return;
+
+        lightboxTrack.classList.toggle("is-animating", animate);
+        lightboxTrack.style.transform = `translateX(calc(-100% + ${offset}px))`;
+      }
+
+      function renderLightboxImages(index) {
+        if (!lightboxPrevImage || !lightboxImage || !lightboxNextImage) return;
+
+        const prevIndex = wrappedGalleryIndex(index - 1);
+        const nextIndex = wrappedGalleryIndex(index + 1);
+
+        lightboxPrevImage.src = galleryImageSrc(prevIndex);
+        lightboxPrevImage.alt = `갤러리 사진 ${prevIndex}`;
         lightboxImage.src = galleryImageSrc(index);
         lightboxImage.alt = `갤러리 사진 ${index}`;
+        lightboxNextImage.src = galleryImageSrc(nextIndex);
+        lightboxNextImage.alt = `갤러리 사진 ${nextIndex}`;
+      }
+
+      function openLightbox(index) {
+        if (!lightbox || !lightboxTrack) return;
+
+        currentGalleryIndex = index;
+        lightboxTrack.classList.remove("is-dragging", "is-animating");
+        renderLightboxImages(index);
+        setLightboxTrackOffset(0);
         lightbox.setAttribute("aria-hidden", "false");
         document.body.classList.add("is-lightbox-open");
       }
 
       function moveLightbox(direction) {
-        const total = Number(gallery?.dataset.galleryTotal || 1);
+        if (!lightboxTrack) return;
 
-        currentGalleryIndex += direction;
+        const viewportWidth = lightboxTrack.parentElement?.clientWidth || window.innerWidth;
+        const offset = direction > 0 ? -viewportWidth : viewportWidth;
 
-        if (currentGalleryIndex < 1) currentGalleryIndex = total;
-        if (currentGalleryIndex > total) currentGalleryIndex = 1;
+        setLightboxTrackOffset(offset, true);
 
-        openLightbox(currentGalleryIndex);
+        setTimeout(() => {
+          currentGalleryIndex = wrappedGalleryIndex(currentGalleryIndex + direction);
+          renderLightboxImages(currentGalleryIndex);
+          setLightboxTrackOffset(0);
+        }, 230);
       }
 
       function closeLightbox() {
-        if (!lightbox || !lightboxImage) return;
+        if (!lightbox || !lightboxTrack) return;
 
         lightbox.setAttribute("aria-hidden", "true");
-        lightboxImage.src = "";
-        lightboxImage.alt = "";
-        lightboxImage.classList.remove("is-dragging");
-        lightboxImage.style.transform = "";
+        lightboxTrack.classList.remove("is-dragging", "is-animating");
+        setLightboxTrackOffset(0);
         document.body.classList.remove("is-lightbox-open");
       }
 
@@ -414,20 +453,17 @@
         touchStartX = event.changedTouches[0].clientX;
         touchStartY = event.changedTouches[0].clientY;
         isDraggingLightbox = true;
-        lightboxImage?.classList.add("is-dragging");
+        lightboxTrack?.classList.add("is-dragging");
       }, { passive: true });
 
       lightbox?.addEventListener("touchmove", (event) => {
-        if (!isDraggingLightbox || !lightboxImage) return;
+        if (!isDraggingLightbox || !lightboxTrack) return;
 
         const diffX = event.changedTouches[0].clientX - touchStartX;
         const diffY = event.changedTouches[0].clientY - touchStartY;
 
         if (Math.abs(diffX) > Math.abs(diffY)) {
-          const limitedX = Math.max(-96, Math.min(96, diffX));
-          const opacity = Math.max(0.72, 1 - Math.abs(limitedX) / 220);
-
-          lightboxImage.style.transform = `translateX(${limitedX}px) scale(${opacity})`;
+          setLightboxTrackOffset(diffX);
         }
       }, { passive: true });
 
@@ -438,13 +474,12 @@
         const diffY = touchEndY - touchStartY;
 
         isDraggingLightbox = false;
-        lightboxImage?.classList.remove("is-dragging");
-        if (lightboxImage) {
-          lightboxImage.style.transform = "";
-        }
+        lightboxTrack?.classList.remove("is-dragging");
 
         if (Math.abs(diffX) > 48 && Math.abs(diffX) > Math.abs(diffY)) {
           moveLightbox(diffX > 0 ? -1 : 1);
+        } else {
+          setLightboxTrackOffset(0, true);
         }
       }, { passive: true });
 
