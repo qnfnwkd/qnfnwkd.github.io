@@ -59,9 +59,9 @@ body.is-lightbox-open {
   display: block;
   width: calc(100% + (var(--side-padding) * 2));
   max-width: none;
-  height: clamp(260px, 48vh, 420px);
+  height: auto;
   margin: 0 calc(var(--side-padding) * -1) 24px;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
 }
 
@@ -410,6 +410,7 @@ dd {
   grid-template-columns: repeat(3, 100%);
   align-items: center;
   border-radius: 0;
+  cursor: grab;
   touch-action: pan-y;
   transform: translate3d(-100%, 0, 0);
   will-change: transform;
@@ -420,6 +421,7 @@ dd {
 }
 
 .lightbox-track.is-dragging {
+  cursor: grabbing;
   transition: none;
 }
 
@@ -443,32 +445,6 @@ dd {
 .lightbox canvas,
 .lightbox video {
   border-radius: 0 !important;
-}
-
-.lightbox-nav {
-  position: fixed;
-  top: 50%;
-  z-index: 1001;
-  display: grid;
-  width: 42px;
-  height: 42px;
-  place-items: center;
-  border: 0;
-  border-radius: 50%;
-  background: rgb(255 255 255 / 88%);
-  color: var(--ink);
-  cursor: pointer;
-  font-size: 34px;
-  line-height: 1;
-  transform: translateY(-50%);
-}
-
-.lightbox-prev {
-  left: max(14px, calc((100vw - 480px) / 2 - 58px));
-}
-
-.lightbox-next {
-  right: max(14px, calc((100vw - 480px) / 2 - 58px));
 }
 
 .lightbox-close {
@@ -555,13 +531,17 @@ dd {
 
 .account-list article {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) 64px;
   gap: 12px;
   align-items: center;
   padding: 14px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--paper);
+}
+
+.account-list article > div {
+  min-width: 0;
 }
 
 .account-list strong {
@@ -572,17 +552,30 @@ dd {
 
 .account-list p {
   margin: 0;
+  max-width: 100%;
   font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: normal;
+  text-decoration: none;
+  white-space: nowrap;
+  word-break: keep-all;
 }
 
 .account-list span {
   display: block;
   color: var(--muted);
   font-size: 13px;
+  text-decoration: none;
+  word-break: keep-all;
+}
+
+.account-list a {
+  color: inherit;
+  text-decoration: none;
 }
 
 .copy-account {
-  min-width: 58px;
+  width: 64px;
   min-height: 36px;
   padding: 0 12px;
   border: 1px solid var(--line);
@@ -613,10 +606,6 @@ footer p {
   .section {
     padding-right: 22px;
     padding-left: 22px;
-  }
-
-  .cover-photo {
-    height: clamp(220px, 42vh, 340px);
   }
 
   h2 {
