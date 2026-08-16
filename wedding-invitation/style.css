@@ -141,8 +141,9 @@ dd {
 .notice-text,
 .shuttle-notice {
   color: var(--muted);
-  font-size: 13px;
+  font-size: 11px;
   line-height: 1.7;
+  text-align: left;
 }
 
 .notice-text {
@@ -205,8 +206,9 @@ dd {
   text-align: center;
 }
 .shuttle-notice {
-  margin: 0 0 14px;
+  margin: 10px 0 0;
   text-align: center;
+  text-align: left;
 }
 
 
