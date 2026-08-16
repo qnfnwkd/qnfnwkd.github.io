@@ -138,6 +138,16 @@ dd {
   color: #4e4842;
 }
 
+.notice-text,
+.shuttle-notice {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.notice-text {
+  margin-top: 8px;
+}
 .wedding-calendar {
   margin: 26px auto 30px;
   padding: 18px;
@@ -194,6 +204,11 @@ dd {
   font-size: 18px;
   text-align: center;
 }
+.shuttle-notice {
+  margin: 0 0 14px;
+  text-align: center;
+}
+
 
 .naver-map {
   position: relative;
